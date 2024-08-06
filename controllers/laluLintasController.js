@@ -1,6 +1,6 @@
 const db = require('../db/connection');
 const path = require('path');
-const upload = require('../middleware/upload');
+const upload = require('../middleware/upload'); // Import middleware upload
 
 const addLaluLintas = async (req, res) => {
   try {
@@ -53,7 +53,7 @@ const getLaluLintas = async (req, res) => {
 
     const data = rows.map(row => {
       const imagePath = row.gambar;
-      const imageURL = imagePath ? `${req.protocol}://${req.get('host')}/tmp/uploads/${path.basename(imagePath)}` : null;
+      const imageURL = imagePath ? `${req.protocol}://${req.get('host')}/uploads/${path.basename(imagePath)}` : null;
       return { ...row, gambar: imageURL };
     });
 
