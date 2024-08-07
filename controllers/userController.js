@@ -43,7 +43,7 @@ exports.addUser = async (req, res) => {
     const newUserId = resultInsertUser.rows[0].id;
     const randomNias = generateRandomNias();
 
-    await db.query('INSERT INTO data_user (user_id, nias, nama, alamat, no_telpon) VALUES ($1, $2, $3, $4, $5)', [newUserId, randomNias, '', '', '']);
+    await db.query('INSERT INTO data_user (user_id, nias, nama, alamat, no_telpon) VALUES ($1, $2, $3, $4, $5)', [newUserId, randomNias, '', '', 0 ]);
 
     res.json({ msg: 'User added successfully' });
   } catch (error) {
