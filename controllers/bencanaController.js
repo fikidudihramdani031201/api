@@ -23,13 +23,9 @@ const getBencana = async (req, res) => {
       return res.status(404).json({ msg: 'No data found' });
     }
 
-    const data = rows.map(row => {
-      const imagePath = row.gambar;
-      const imageURL = `${req.protocol}://${req.get('host')}/uploads/${path.basename(imagePath)}`;
-      return { ...row, gambar: imageURL };
-    });
+    
 
-    res.json(data);
+    res.json(rows);
   } catch (error) {
     console.error('Error fetching Bencana data:', error);
     res.status(500).json({ error: 'Internal Server Error' });

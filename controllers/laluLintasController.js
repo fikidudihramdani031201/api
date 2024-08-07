@@ -45,19 +45,14 @@ const getLaluLintas = async (req, res) => {
       FROM lalu_lintas
     `);
 
-    const rows = result.rows;
+  const rows = result.rows;
 
     if (rows.length === 0) {
       return res.status(404).json({ msg: 'No data found' });
     }
 
-    const data = rows.map(row => {
-      const imagePath = row.gambar;
-      const imageURL = imagePath ? `${req.protocol}://${req.get('host')}/tmp/uploads/${path.basename(imagePath)}` : null;
-      return { ...row, gambar: imageURL };
-    });
 
-    res.json(data);
+    res.json(rows);
   } catch (error) {
     console.error('Error fetching Lalu Lintas data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
