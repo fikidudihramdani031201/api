@@ -26,10 +26,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Static file serving
-app.use('/images', express.static(path.join('/tmp/images')));
-app.use('/uploads', express.static(path.join('/tmp/uploads')));
-app.use('/images', express.static('images'));
-app.use('/uploads', express.static('uploads'));
+app.use('/tmp-images', express.static(path.join(__dirname, 'tmp/images')));
+app.use('/tmp-uploads', express.static(path.join(__dirname, 'tmp/uploads')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // Auth routes
 app.post('/login', login);
