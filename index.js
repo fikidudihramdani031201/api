@@ -28,6 +28,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Static file serving
 app.use('/images', express.static(path.join('/tmp/images')));
 app.use('/uploads', express.static(path.join('/tmp/uploads')));
+app.use('/images', express.static('images'));
+app.use('/uploads', express.static('uploads'));
 
 // Auth routes
 app.post('/login', login);
