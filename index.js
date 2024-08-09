@@ -11,7 +11,7 @@ const { getMembers, getTotalCounts, addUser, checkProfile, getMonthlyData, getUs
 const upload = require('./middleware/upload');
 const imageUpload = require('./middleware/imageUpload');
 const path = require('path')
-
+const { addOrUpdateToken, removeToken, getTokensByUserId } = require('./controllers/firebaseController');
 const { sendNotification } = require('./controllers/notifikasi');
 
 
@@ -63,6 +63,9 @@ app.post('/notifikasi', sendNotification)
 
 app.get('/dashboard',getMonthlyData )
 app.get('/users/:id', getUserById);
+app.post('/token', addOrUpdateToken);
+app.delete('/token', removeToken);
+app.get('/tokens/:userId', getTokensByUserId);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

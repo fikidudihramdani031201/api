@@ -24,6 +24,8 @@ exports.login = async (req, res) => {
       if (err) throw err;
       res.json({ token });
     });
+
+    console.log(payload)
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).send('Server Error');
