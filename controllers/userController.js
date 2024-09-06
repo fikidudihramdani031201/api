@@ -59,6 +59,7 @@ function generateRandomNias() {
 }
 
 // Get total counts of disasters, kamtibmas, and traffic
+// Get total counts of disasters, kamtibmas, traffic, and members
 exports.getTotalCounts = async (req, res) => {
   try {
     const disasterCountResult = await db.query('SELECT COUNT(*) AS total_disasters FROM bencana');
@@ -70,10 +71,15 @@ exports.getTotalCounts = async (req, res) => {
     const trafficCountResult = await db.query('SELECT COUNT(*) AS total_traffic FROM lalu_lintas');
     const totalTraffic = parseInt(trafficCountResult.rows[0].total_traffic);
 
+    // Query to get total members
+    const membersCountResult = await db.query('SELECT COUNT(*) AS total_members FROM data_user');
+    const totalMembers = parseInt(membersCountResult.rows[0].total_members);
+
     const totalCounts = {
       totalDisasters,
       totalKamtibmas,
       totalTraffic,
+      totalMembers // Add total members to the response
     };
 
     res.json(totalCounts);
@@ -82,6 +88,7 @@ exports.getTotalCounts = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 // Check user profile
 exports.checkProfile = async (req, res) => {
@@ -140,55 +147,8 @@ exports.getMonthlyData = async (req, res) => {
   }
 };
 
-// Data profile for statistics
-exports.dataProfile = async (req, res) => {
-  try {
-    // Query for total disasters
-    const disasterResult = await db.query(`
-      SELECT
-        TO_CHAR(tanggal_kejadian, 'YYYY-MM') AS month,
-        COUNT(*) AS total_disasters
-      FROM bencana
-      WHERE tanggal_kejadian >= CURRENT_DATE - INTERVAL '5 months'
-      GROUP BY month
-      ORDER BY month;
-    `);
 
-    // Query for total kamtibmas
-    const kamtibmasResult = await db.query(`
-      SELECT
-        TO_CHAR(tanggal_kejadian, 'YYYY-MM') AS month,
-        COUNT(*) AS total_kamtibmas
-      FROM kamtibmas
-      WHERE tanggal_kejadian >= CURRENT_DATE - INTERVAL '5 months'
-      GROUP BY month
-      ORDER BY month;
-    `);
 
-    // Query for total traffic
-    const trafficResult = await db.query(`
-      SELECT
-        TO_CHAR(tanggal_kejadian, 'YYYY-MM') AS month,
-        COUNT(*) AS total_traffic
-      FROM lalu_lintas
-      WHERE tanggal_kejadian >= CURRENT_DATE - INTERVAL '5 months'
-      GROUP BY month
-      ORDER BY month;
-    `);
-
-    // Combine results into a single response object
-    const response = {
-      totalDisasters: disasterResult.rows.map(row => ({ month: row.month, count: parseInt(row.total_disasters) })),
-      totalKamtibmas: kamtibmasResult.rows.map(row => ({ month: row.month, count: parseInt(row.total_kamtibmas) })),
-      totalTraffic: trafficResult.rows.map(row => ({ month: row.month, count: parseInt(row.total_traffic) }))
-    };
-
-    res.json(response);
-  } catch (error) {
-    console.error('Error fetching monthly data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
 
 // Get user by ID
 exports.getUserById = async (req, res) => {
