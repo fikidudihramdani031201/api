@@ -4,7 +4,7 @@ const fs = require('fs');
 // Fetch all members
 exports.getMembers = async (req, res) => {
   try {
-    const result = await db.query('SELECT user_id, nias, nama, alamat, no_telpon, profile_picture FROM data_user');
+    const result = await db.query('SELECT user_id, nias, nama, alamat, no_telpon, profile_picture, nama_belakang FROM data_user');
     const rows = result.rows;
 
     if (rows.length === 0) {
@@ -15,6 +15,7 @@ exports.getMembers = async (req, res) => {
       id: member.user_id,
       nias: member.nias,
       nama: member.nama,
+      nama_belakang: member.nama_belakang,
       alamat: member.alamat,
       no_telpon: member.no_telpon,
       profile_picture: member.profile_picture,

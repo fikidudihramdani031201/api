@@ -8,7 +8,7 @@ const getProfile = async (req, res) => {
 
   try {
     // Query dengan parameter placeholder $1
-    const result = await db.query('SELECT user_id, nias, nama, profile_picture, alamat, no_telpon FROM data_user WHERE user_id = $1', [userId]);
+    const result = await db.query('SELECT user_id, nias, nama, profile_picture, alamat, no_telpon, nama_belakang FROM data_user WHERE user_id = $1', [userId]);
     const rows = result.rows;
 
     if (rows.length === 0) {
@@ -23,6 +23,7 @@ const getProfile = async (req, res) => {
       alamat: userProfile.alamat,
       no_telpon: userProfile.no_telpon,
       profile_picture: userProfile.profile_picture,
+      nama_belakang: userProfile.nama_belakang,
     };
     res.json(response);
   } catch (error) {
@@ -63,14 +64,14 @@ const uploadProfilePicture = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   const userId = req.user.user.id;
-  const { nama, alamat, no_telpon, nias } = req.body;
+  const { nama, alamat, no_telpon, nias, nama_belakang } = req.body;
 
   try {
     const existingNias = req.user.user.nias;
 
     await db.query('BEGIN'); // Memulai transaksi
 
-    await db.query('UPDATE data_user SET nama = $1, alamat = $2, no_telpon = $3, nias = $4 WHERE user_id = $5', [nama, alamat, no_telpon, nias, userId]);
+    await db.query('UPDATE data_user SET nama = $1, alamat = $2, no_telpon = $3, nias = $4, nama_belakang = $5 WHERE user_id = $6', [nama, alamat, no_telpon, nias,nama_belakang, userId]);
     await db.query('UPDATE kamtibmas SET nias = $1 WHERE nias = $2', [nias, existingNias]);
 
     await db.query('COMMIT'); // Mengonfirmasi transaksi
